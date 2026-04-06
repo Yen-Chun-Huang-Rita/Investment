@@ -265,6 +265,7 @@ tr:hover td{background:var(--bg2);}
 
   <!-- PAGE 0: 股票組合 -->
   <div id="page0" class="page active">
+    <div class="mc-grid" id="summaryGrid"></div>
     <div class="controls">
       <button class="btn btn-primary" id="addBtn" onclick="openAddStock()">+ 新增股票</button>
       <button class="collapse-all-btn" onclick="toggleAllStocks()">⊟ 全部收合</button>
@@ -275,7 +276,6 @@ tr:hover td{background:var(--bg2);}
         <tbody id="stockBody"></tbody>
       </table>
     </div>
-    <div class="mc-grid" id="summaryGrid"></div>
     <div class="cash-section">
       <h4>現金部位</h4>
       <div class="cash-rows" id="cashRows"></div>
@@ -288,11 +288,11 @@ tr:hover td{background:var(--bg2);}
 
   <!-- PAGE 1: 處分紀錄 -->
   <div id="page1" class="page">
+    <div class="mc-grid" id="disposalSummary"></div>
     <div class="controls">
       <button class="collapse-all-btn" onclick="toggleAllDisposals()">⊟ 全部收合</button>
     </div>
     <div id="disposalGroupsContainer"></div>
-    <div class="mc-grid" id="disposalSummary"></div>
   </div>
 
   <!-- PAGE 2: 市價 / 匯率 -->
@@ -838,38 +838,14 @@ function renderStockTable(){
 }
 
 function renderSummary(){
-  const stocks = st.stocks[cu];
   const d = calcUserSummary(cu);
   const pc = d.pnl>=0?'pos':'neg';
 
-  // Group by currency for original-currency subtotals
-  const byCurr = {};
-  stocks.forEach(s=>{
-    if(!byCurr[s.curr]) byCurr[s.curr]={mv:0,cost:0,curr:s.curr};
-    const p = getPrice(s.ticker);
-    byCurr[s.curr].cost += s.cost * s.qty;
-    if(p>0) byCurr[s.curr].mv += p * s.qty;
-  });
-
-  // Build per-currency cards (only if non-TWD exists)
-  const currCards = Object.values(byCurr).filter(g=>g.curr!=='TWD'&&g.mv>0).map(g=>{
-    const dec=(g.curr==='USD'||g.curr==='HKD')?2:0;
-    const pnlOrig = g.mv - g.cost;
-    const pnlPctOrig = g.cost>0?(pnlOrig/g.cost)*100:0;
-    const pc2=pnlOrig>=0?'pos':'neg';
-    return `<div class="mc">
-      <div class="mc-label">市值 (${g.curr})</div>
-      <div class="mc-val">${fmtCurr(g.mv,g.curr,dec)}</div>
-      <div class="mc-sub ${pc2}">損益 ${pnlOrig>=0?'+':''}${fmtCurr(pnlOrig,g.curr,dec)} (${fmtPct(pnlPctOrig)})</div>
-    </div>`;
-  }).join('');
-
   document.getElementById('summaryGrid').innerHTML = `
-    <div class="mc"><div class="mc-label">總投資成本 (TWD)</div><div class="mc-val">${fmtTWD(d.tCostTWD)}</div></div>
-    <div class="mc"><div class="mc-label">持股總市值 (TWD)</div><div class="mc-val">${fmtTWD(d.tMV_TWD)}</div></div>
-    <div class="mc"><div class="mc-label">投資損益 (TWD)</div><div class="mc-val ${pc}">${d.pnl>=0?'+':'-'}${fmtTWD(Math.abs(d.pnl))}</div><div class="mc-sub ${pc}">${fmtPct(d.pct)}</div></div>
     <div class="mc"><div class="mc-label">總資產 (TWD)</div><div class="mc-val">${fmtTWD(d.total)}</div></div>
-    ${currCards}`;
+    <div class="mc"><div class="mc-label">投資損益 (TWD)</div><div class="mc-val ${pc}">${d.pnl>=0?'+':'-'}${fmtTWD(Math.abs(d.pnl))}</div><div class="mc-sub ${pc}">${fmtPct(d.pct)}</div></div>
+    <div class="mc"><div class="mc-label">持股總市值 (TWD)</div><div class="mc-val">${fmtTWD(d.tMV_TWD)}</div></div>
+    <div class="mc"><div class="mc-label">總投資成本 (TWD)</div><div class="mc-val">${fmtTWD(d.tCostTWD)}</div></div>`;
 }
 
 function renderCash(){
