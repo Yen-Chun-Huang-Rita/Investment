@@ -21,8 +21,8 @@
   --text:#f2f2f7;--text2:#aeaeb2;--text3:#636366;
   --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.18);
 }}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;font-size:17px;}
-.shell{max-width:1080px;margin:0 auto;padding:1.5rem 1rem;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;font-size:19px;}
+.shell{max-width:1100px;margin:0 auto;padding:1.5rem 1rem;}
 
 /* ── THEME BACKGROUNDS ── */
 body.theme-sage   {--bg3:#e8ede8;--bg2:#dde5dd;--bg:#f4f7f4;}
@@ -45,63 +45,63 @@ body.theme-charcoal{--bg3:#2b2b2b;--bg2:#333;--bg:#3d3d3d;--text:#f0f0f0;--text2
 
 /* ── MODAL OVERLAY ── */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;}
-.modal{background:var(--bg);border-radius:var(--radl);padding:1.5rem;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.18);}
-.modal-title{font-size:18px;font-weight:600;margin-bottom:1.25rem;color:var(--text);}
+.modal{background:var(--bg);border-radius:var(--radl);padding:1.5rem;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.18);}
+.modal-title{font-size:20px;font-weight:600;margin-bottom:1.25rem;color:var(--text);}
 .modal-actions{display:flex;gap:8px;margin-top:1.25rem;justify-content:flex-end;}
 .hidden{display:none!important;}
 
 /* ── BUTTONS ── */
-.btn{font-size:14px;padding:8px 18px;border-radius:var(--rad);cursor:pointer;border:1px solid var(--border2);background:var(--bg);color:var(--text);transition:background .12s;}
+.btn{font-size:15px;padding:9px 20px;border-radius:var(--rad);cursor:pointer;border:1px solid var(--border2);background:var(--bg);color:var(--text);transition:background .12s;}
 .btn:hover{background:var(--bg2);}
 .btn-primary{color:#fff;border:none;}
 .btn-u1{background:var(--c1);}  .btn-u1:hover{background:#0C447C;}
 .btn-u2{background:var(--c2);}  .btn-u2:hover{background:#27500A;}
 .btn-danger{background:#D85A30;color:#fff;border:none;}
 .btn-danger:hover{background:#993C1D;}
-.btn-sm{padding:5px 12px;font-size:13px;}
-.btn-icon{padding:4px 10px;font-size:13px;background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:var(--text2);}
+.btn-sm{padding:6px 14px;font-size:14px;}
+.btn-icon{padding:5px 12px;font-size:14px;background:none;border:1px solid var(--border);border-radius:4px;cursor:pointer;color:var(--text2);}
 .btn-icon:hover{background:var(--bg2);}
 .btn-icon.danger:hover{border-color:var(--neg);color:var(--neg);}
 
 /* ── FORM ELEMENTS ── */
-select,input,textarea{font-size:14px;background:var(--bg);color:var(--text);border:1px solid var(--border2);border-radius:var(--rad);padding:8px 11px;outline:none;width:100%;}
+select,input,textarea{font-size:15px;background:var(--bg);color:var(--text);border:1px solid var(--border2);border-radius:var(--rad);padding:9px 12px;outline:none;width:100%;}
 select:focus,input:focus{border-color:var(--c1);}
-.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
 .fg2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.fg label,.form-label{font-size:12px;color:var(--text2);display:block;margin-bottom:3px;}
+.fg label,.form-label{font-size:13px;color:var(--text2);display:block;margin-bottom:3px;}
 .form-group{display:flex;flex-direction:column;gap:3px;}
 .seg{display:flex;border:1px solid var(--border2);border-radius:var(--rad);overflow:hidden;}
-.seg button{flex:1;padding:8px;border:none;background:var(--bg2);color:var(--text2);cursor:pointer;font-size:14px;}
+.seg button{flex:1;padding:9px;border:none;background:var(--bg2);color:var(--text2);cursor:pointer;font-size:15px;}
 .seg button.active{background:var(--c1);color:#fff;}
 
 /* ── WELCOME ── */
 .welcome{display:flex;flex-direction:column;align-items:center;padding:3rem 1rem 2rem;}
-.welcome-logo{font-size:30px;font-weight:700;margin-bottom:.4rem;}
-.welcome-sub{font-size:15px;color:var(--text2);margin-bottom:2.5rem;}
+.welcome-logo{font-size:32px;font-weight:700;margin-bottom:.4rem;}
+.welcome-sub{font-size:16px;color:var(--text2);margin-bottom:2.5rem;}
 .user-cards{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;}
-.user-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radl);padding:1.75rem 2rem;cursor:pointer;text-align:center;box-shadow:var(--shadow);transition:border-color .15s,transform .12s,box-shadow .12s;min-width:180px;position:relative;}
+.user-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radl);padding:1.75rem 2rem;cursor:pointer;text-align:center;box-shadow:var(--shadow);transition:border-color .15s,transform .12s,box-shadow .12s;min-width:185px;position:relative;}
 .user-card:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,0.12);}
 .user-card.u1:hover{border-color:var(--c1);}
 .user-card.u2:hover{border-color:var(--c2);}
-.avatar{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:600;margin:0 auto 1rem;}
+.avatar{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:600;margin:0 auto 1rem;}
 .av1{background:var(--c1l);color:var(--c1);}
 .av2{background:var(--c2l);color:var(--c2);}
-.user-card h3{font-size:19px;font-weight:600;margin-bottom:6px;}
-.user-card .stat{font-size:14px;color:var(--text2);}
+.user-card h3{font-size:21px;font-weight:600;margin-bottom:6px;}
+.user-card .stat{font-size:15px;color:var(--text2);}
 .user-card .stat.pos{color:var(--pos);}
 .user-card .stat.neg{color:var(--neg);}
-.edit-name-btn{position:absolute;top:8px;right:8px;font-size:12px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);background:none;cursor:pointer;color:var(--text3);}
+.edit-name-btn{position:absolute;top:8px;right:8px;font-size:13px;padding:3px 9px;border-radius:4px;border:1px solid var(--border);background:none;cursor:pointer;color:var(--text3);}
 .edit-name-btn:hover{color:var(--text2);}
 
 /* ── APP ── */
 .app-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px;}
 .user-pill{display:flex;align-items:center;gap:10px;}
-.pill-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;}
-.app-title{font-size:19px;font-weight:600;}
+.pill-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;}
+.app-title{font-size:21px;font-weight:600;}
 
 /* ── TABS ── */
 .tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.25rem;overflow-x:auto;}
-.tab{padding:10px 20px;font-size:14px;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;flex-shrink:0;}
+.tab{padding:11px 22px;font-size:15px;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;flex-shrink:0;}
 .tab.active{font-weight:600;border-bottom-width:2px;}
 .tab.active.u1{color:var(--c1);border-bottom-color:var(--c1);}
 .tab.active.u2{color:var(--c2);border-bottom-color:var(--c2);}
@@ -109,103 +109,103 @@ select:focus,input:focus{border-color:var(--c1);}
 /* ── TABLE ── */
 .tbl-wrap{overflow-x:auto;border-radius:var(--radl);border:1px solid var(--border);background:var(--bg);margin-bottom:1rem;}
 table{width:100%;border-collapse:collapse;min-width:760px;}
-th{padding:10px 12px;text-align:left;font-size:12px;font-weight:500;color:var(--text2);border-bottom:1px solid var(--border);background:var(--bg2);white-space:nowrap;}
-td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;white-space:nowrap;font-size:14px;}
+th{padding:11px 13px;text-align:left;font-size:13px;font-weight:500;color:var(--text2);border-bottom:1px solid var(--border);background:var(--bg2);white-space:nowrap;}
+td{padding:11px 13px;border-bottom:1px solid var(--border);vertical-align:middle;white-space:nowrap;font-size:15px;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:var(--bg2);}
 .right{text-align:right;}
 .pos{color:var(--pos);}
 .neg{color:var(--neg);}
-.ticker-name{font-weight:600;font-size:14px;}
-.ticker-sub{font-size:12px;color:var(--text2);}
-.mkt-badge{font-size:11px;padding:2px 6px;border-radius:3px;background:var(--bg3);color:var(--text2);margin-left:4px;}
-.curr-badge{font-size:11px;padding:2px 6px;border-radius:3px;margin-left:3px;}
+.ticker-name{font-weight:600;font-size:15px;}
+.ticker-sub{font-size:13px;color:var(--text2);}
+.mkt-badge{font-size:12px;padding:2px 6px;border-radius:3px;background:var(--bg3);color:var(--text2);margin-left:4px;}
+.curr-badge{font-size:12px;padding:2px 7px;border-radius:3px;margin-left:3px;}
 .curr-TWD{background:#E6F1FB;color:#185FA5;}
 .curr-USD{background:#EAF3DE;color:#3B6D11;}
 .curr-JPY{background:#FAEEDA;color:#854F0B;}
 .curr-HKD{background:#FBEAF0;color:#993556;}
 
 /* ── METRIC CARDS ── */
-.mc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:1rem;}
-.mc{background:var(--bg);border:1px solid var(--border);border-radius:var(--rad);padding:16px 18px;box-shadow:var(--shadow);min-width:0;}
-.mc-label{font-size:12px;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}
-.mc-val{font-size:clamp(16px,2.2vw,22px);font-weight:700;word-break:break-all;line-height:1.2;}
-.mc-sub{font-size:13px;color:var(--text2);margin-top:4px;}
+.mc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:1rem;}
+.mc{background:var(--bg);border:1px solid var(--border);border-radius:var(--rad);padding:17px 20px;box-shadow:var(--shadow);min-width:0;}
+.mc-label{font-size:13px;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}
+.mc-val{font-size:clamp(17px,2.3vw,23px);font-weight:700;word-break:break-all;line-height:1.2;}
+.mc-sub{font-size:14px;color:var(--text2);margin-top:4px;}
 
 /* ── CASH SECTION ── */
 .cash-section{background:var(--bg);border:1px solid var(--border);border-radius:var(--radl);padding:1rem 1.25rem;margin-bottom:1.5rem;box-shadow:var(--shadow);}
-.cash-section h4{font-size:15px;font-weight:600;margin-bottom:10px;color:var(--text);}
+.cash-section h4{font-size:16px;font-weight:600;margin-bottom:10px;color:var(--text);}
 .cash-rows{display:flex;flex-direction:column;gap:8px;}
 .cash-row-item{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.cash-row-item label{font-size:14px;color:var(--text2);width:60px;flex-shrink:0;}
+.cash-row-item label{font-size:15px;color:var(--text2);width:65px;flex-shrink:0;}
 .cash-row-item input{max-width:160px;}
-.cash-row-item .cash-val{font-size:14px;font-weight:500;min-width:130px;}
+.cash-row-item .cash-val{font-size:15px;font-weight:500;min-width:140px;}
 .cash-total-row{border-top:1px solid var(--border);padding-top:10px;margin-top:6px;display:flex;justify-content:space-between;align-items:center;}
-.cash-total-row .label{font-size:13px;color:var(--text2);}
-.cash-total-row .val{font-size:18px;font-weight:700;}
+.cash-total-row .label{font-size:14px;color:var(--text2);}
+.cash-total-row .val{font-size:20px;font-weight:700;}
 
 /* ── PRICE TABLE ── */
 .price-section{background:var(--bg);border:1px solid var(--border);border-radius:var(--radl);padding:1rem 1.25rem;margin-bottom:1rem;box-shadow:var(--shadow);}
-.price-section h4{font-size:15px;font-weight:600;margin-bottom:10px;}
-.price-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;}
+.price-section h4{font-size:16px;font-weight:600;margin-bottom:10px;}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
 .price-item{display:flex;align-items:center;gap:8px;}
-.price-item .ticker-label{font-size:14px;font-weight:500;min-width:80px;}
-.price-item input{max-width:120px;}
-.fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:1rem;}
-.fx-item{display:flex;align-items:center;gap:8px;font-size:14px;}
-.fx-item label{color:var(--text2);min-width:110px;}
-.fx-item input{max-width:110px;}
+.price-item .ticker-label{font-size:15px;font-weight:500;min-width:85px;}
+.price-item input{max-width:130px;}
+.fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:1rem;}
+.fx-item{display:flex;align-items:center;gap:8px;font-size:15px;}
+.fx-item label{color:var(--text2);min-width:115px;}
+.fx-item input{max-width:115px;}
 
 /* ── COLLAPSIBLE STOCK ROWS ── */
 .stock-header-row{cursor:pointer;user-select:none;}
 .stock-header-row:hover td{background:var(--bg2);}
-.stock-toggle{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);font-size:14px;font-weight:700;color:var(--text2);flex-shrink:0;transition:transform .2s,background .15s;margin-right:6px;}
+.stock-toggle{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border2);font-size:15px;font-weight:700;color:var(--text2);flex-shrink:0;transition:transform .2s,background .15s;margin-right:6px;}
 .stock-toggle.open{transform:rotate(45deg);background:var(--bg3);}
 .stock-detail-row td{padding-top:0;padding-bottom:10px;background:var(--bg2) !important;}
 .stock-detail-row.collapsed{display:none;}
 
 /* ── COLLAPSIBLE DISPOSAL GROUPS ── */
-.dgh-toggle{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border2);font-size:15px;font-weight:700;color:var(--text2);cursor:pointer;flex-shrink:0;transition:transform .2s,background .15s;background:var(--bg);margin-right:4px;}
+.dgh-toggle{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border2);font-size:16px;font-weight:700;color:var(--text2);cursor:pointer;flex-shrink:0;transition:transform .2s,background .15s;background:var(--bg);margin-right:4px;}
 .dgh-toggle.open{transform:rotate(45deg);}
 .disposal-body-wrap.collapsed{display:none;}
 
 /* ── EXPAND/COLLAPSE ALL ── */
-.collapse-all-btn{font-size:13px;padding:5px 12px;border-radius:var(--rad);border:1px solid var(--border2);background:none;color:var(--text2);cursor:pointer;}
+.collapse-all-btn{font-size:14px;padding:6px 14px;border-radius:var(--rad);border:1px solid var(--border2);background:none;color:var(--text2);cursor:pointer;}
 .collapse-all-btn:hover{background:var(--bg2);}
 
 /* ── DISPOSAL ── */
-.disposal-badge{font-size:11px;padding:2px 7px;border-radius:10px;background:#FAECE7;color:#D85A30;margin-left:4px;}
+.disposal-badge{font-size:12px;padding:2px 8px;border-radius:10px;background:#FAECE7;color:#D85A30;margin-left:4px;}
 @media(prefers-color-scheme:dark){.disposal-badge{background:#4A1B0C;color:#F0997B;}}
 
 /* ── DISPOSAL GROUPED ── */
 .disposal-group{margin-bottom:1.5rem;}
-.disposal-group-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg2);border-radius:var(--rad) var(--rad) 0 0;border:1px solid var(--border);border-bottom:none;}
+.disposal-group-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg2);border-radius:var(--rad) var(--rad) 0 0;border:1px solid var(--border);border-bottom:none;}
 .dgh-left{display:flex;align-items:center;gap:10px;}
-.dgh-title{font-size:15px;font-weight:600;}
-.dgh-sub{font-size:12px;color:var(--text2);}
-.dgh-pnl{font-size:15px;font-weight:700;}
+.dgh-title{font-size:16px;font-weight:600;}
+.dgh-sub{font-size:13px;color:var(--text2);}
+.dgh-pnl{font-size:16px;font-weight:700;}
 .disposal-group .tbl-wrap{border-radius:0 0 var(--rad) var(--rad);margin-bottom:0;}
-.subtotal-row td{background:var(--bg2)!important;font-weight:600;font-size:13px;border-top:1px solid var(--border2);}
+.subtotal-row td{background:var(--bg2)!important;font-weight:600;font-size:14px;border-top:1px solid var(--border2);}
 
 /* ── DASHBOARD ── */
 .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
 @media(max-width:600px){.chart-grid{grid-template-columns:1fr;}}
 .chart-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radl);padding:1rem 1.25rem;box-shadow:var(--shadow);}
-.chart-card h3{font-size:15px;font-weight:600;margin-bottom:10px;}
+.chart-card h3{font-size:16px;font-weight:600;margin-bottom:10px;}
 .cw{position:relative;}
 .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;}
-.lg-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2);}
-.lg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+.lg-item{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text2);}
+.lg-dot{width:11px;height:11px;border-radius:2px;flex-shrink:0;}
 
 .page{display:none;}
 .page.active{display:block;}
 #mainApp{display:none;}
 
 .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:1rem;}
-.empty-state{text-align:center;padding:2.5rem;color:var(--text2);font-size:15px;}
+.empty-state{text-align:center;padding:2.5rem;color:var(--text2);font-size:16px;}
 
 .divider{height:1px;background:var(--border);margin:1rem 0;}
-.section-label{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.section-label{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
 </style>
 </head>
 <body>
@@ -447,6 +447,31 @@ tr:hover td{background:var(--bg2);}
   </div>
 </div>
 
+<!-- Edit Disposal Record -->
+<div class="overlay hidden" id="modalEditDisposal">
+  <div class="modal">
+    <div class="modal-title">修改處分紀錄</div>
+    <div style="background:var(--bg2);border-radius:var(--rad);padding:10px 14px;margin-bottom:1rem;font-size:15px;">
+      <span id="ed_info" style="font-weight:600;color:var(--text2);"></span>
+    </div>
+    <div class="fg2" style="margin-bottom:10px;">
+      <div class="form-group"><label class="form-label">處分日期</label><input type="date" id="ed_date"></div>
+      <div class="form-group"><label class="form-label">處分股數</label><input type="number" id="ed_qty" step="1" oninput="calcEditDisposalPreview()"></div>
+      <div class="form-group"><label class="form-label">處分均價</label><input type="number" id="ed_price" step="0.01" oninput="calcEditDisposalPreview()"></div>
+      <div class="form-group"><label class="form-label">手續費</label><input type="number" id="ed_fee" step="0.01" oninput="calcEditDisposalPreview()"></div>
+    </div>
+    <div style="background:var(--bg2);border-radius:var(--rad);padding:12px 14px;font-size:15px;">
+      <div style="color:var(--text2);margin-bottom:4px;font-size:13px;">修改後損益預覽</div>
+      <div style="font-size:20px;font-weight:700;" id="ed_preview">--</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modalEditDisposal')">取消</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteDisposalRecord()">刪除此筆</button>
+      <button class="btn btn-primary" id="btnConfirmEditDisposal" onclick="confirmEditDisposal()">儲存修改</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 // ════════════════════════════════════════
@@ -484,6 +509,31 @@ function load(){
   catch(e){ return defaultState(); }
 }
 function save(){ localStorage.setItem('invTracker', JSON.stringify(st)); }
+
+// Sort stocks and disposals for current user by date ascending
+function sortData(){
+  st.stocks[cu].sort((a,b)=> a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+  st.disposals[cu].sort((a,b)=> a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+}
+
+function manualSave(){
+  save();
+  const btn = document.getElementById('saveBtn');
+  if(!btn) return;
+  const orig = btn.textContent;
+  btn.textContent = '✓ 已儲存';
+  btn.style.background = 'var(--pos)';
+  btn.style.color = '#fff';
+  btn.style.borderColor = 'var(--pos)';
+  btn.disabled = true;
+  setTimeout(()=>{
+    btn.textContent = orig;
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+    btn.disabled = false;
+  }, 1500);
+}
 
 let st = load();
 
@@ -632,8 +682,10 @@ function toggleStock(key){
 }
 
 function toggleAllStocks(){
-  const allOpen = Object.values(stockOpen).every(v=>v);
-  st.stocks[cu].forEach((_,i)=>{ stockOpen[`${cu}-${i}`] = !allOpen; });
+  // stockOpen keys are now ticker-based
+  const keys = [...new Set(st.stocks[cu].map(s=>s.ticker))];
+  const allOpen = keys.length > 0 && keys.every(k => stockOpen[`${cu}-${k}`]);
+  keys.forEach(k=>{ stockOpen[`${cu}-${k}`] = !allOpen; });
   renderStockTable();
   const btn = document.querySelector('#page0 .collapse-all-btn');
   if(btn) btn.textContent = allOpen ? '⊞ 展開全部' : '⊟ 全部收合';
@@ -644,88 +696,139 @@ function renderStockTable(){
   const stocks = st.stocks[cu];
   if(!stocks.length){ tbody.innerHTML = '<tr><td colspan="3" class="empty-state">尚無持股，點擊「新增股票」開始建立</td></tr>'; return; }
 
-  let html = '';
+  // Group by ticker (preserve order of first appearance)
+  const groupOrder = [];
+  const groups = {};
   stocks.forEach((s,i)=>{
-    const key = `${cu}-${i}`;
+    if(!groups[s.ticker]){
+      groups[s.ticker] = { ticker:s.ticker, name:s.name, curr:s.curr, rows:[] };
+      groupOrder.push(s.ticker);
+    }
+    groups[s.ticker].rows.push({s, i});
+  });
+
+  let html = '';
+
+  groupOrder.forEach(ticker=>{
+    const g = groups[ticker];
+    const key = `${cu}-${ticker}`;
     if(!(key in stockOpen)) stockOpen[key] = false; // default collapsed
     const isOpen = stockOpen[key];
 
-    const p = getPrice(s.ticker);
-    const cost = s.cost * s.qty;
-    const mv = p * s.qty;
-    const costTWD = toTWD(cost, s.curr);
-    const mvTWD = toTWD(mv, s.curr);
-    const pnl = mvTWD - costTWD;
-    const pct = costTWD > 0 ? (pnl/costTWD)*100 : 0;
-    const pc = pnl>=0?'pos':'neg';
-    const dec = (s.curr==='USD'||s.curr==='HKD') ? 2 : 0;
-    const pnlOrig = mv - cost;
-    const showOrig = s.curr !== 'TWD' && p > 0;
+    const curr = g.curr;
+    const dec = (curr==='USD'||curr==='HKD') ? 2 : 0;
+    const p = getPrice(ticker);
+    const showOrig = curr !== 'TWD' && p > 0;
 
-    const mvCell = p > 0
-      ? `${fmtTWD(mvTWD)}${showOrig ? `<br><span style="font-size:11px;color:var(--text2);font-weight:400;">${fmtCurr(mv,s.curr,dec)}</span>` : ''}`
-      : '--';
-    const pnlCell = p > 0
-      ? `${pnl>=0?'+':'-'}${fmtTWD(Math.abs(pnl))}${showOrig ? `<br><span style="font-size:11px;font-weight:400;color:${pnlOrig>=0?'var(--pos)':'var(--neg)'};">${pnlOrig>=0?'+':''}${fmtCurr(pnlOrig,s.curr,dec)}</span>` : ''}`
-      : '--';
+    // Aggregate totals across all rows of this ticker
+    let totalQty = 0, totalCostOrig = 0;
+    g.rows.forEach(({s})=>{ totalQty += s.qty; totalCostOrig += s.cost * s.qty; });
+    const avgCost = totalQty > 0 ? totalCostOrig / totalQty : 0;
+    const totalMVOrig = p > 0 ? p * totalQty : 0;
+    const totalCostTWD = toTWD(totalCostOrig, curr);
+    const totalMVTWD   = toTWD(totalMVOrig, curr);
+    const pnlTWD = totalMVTWD - totalCostTWD;
+    const pnlOrig = totalMVOrig - totalCostOrig;
+    const pct = totalCostTWD > 0 ? (pnlTWD / totalCostTWD) * 100 : 0;
+    const pc = pnlTWD >= 0 ? 'pos' : 'neg';
 
-    // Compact summary line shown when collapsed
-    const pnlSummary = p > 0
-      ? `<span class="${pc}" style="font-size:13px;font-weight:600;">${pnl>=0?'+':'-'}${fmtTWD(Math.abs(pnl))} (${fmtPct(pct)})</span>`
+    // Collapsed summary bar
+    const mvSummary   = p > 0 ? `<span style="font-size:14px;color:var(--text2);">市值 ${fmtTWD(totalMVTWD)}${showOrig?` <span style="font-size:12px;">(${fmtCurr(totalMVOrig,curr,dec)})</span>`:''}</span>` : '';
+    const pnlSummary  = p > 0
+      ? `<span class="${pc}" style="font-size:14px;font-weight:600;">${pnlTWD>=0?'+':'-'}${fmtTWD(Math.abs(pnlTWD))}${showOrig?` <span style="font-size:12px;">(${pnlOrig>=0?'+':''}${fmtCurr(pnlOrig,curr,dec)})</span>`:''} ${fmtPct(pct)}</span>`
       : `<span style="color:var(--text3);font-size:13px;">未設市價</span>`;
-    const mvSummary = p > 0 ? `<span style="font-size:13px;color:var(--text2);">市值 ${fmtTWD(mvTWD)}</span>` : '';
-    const qtySummary = `<span style="font-size:13px;color:var(--text2);">${s.qty.toLocaleString()} 股</span>`;
+    const costSummary = `<span style="font-size:14px;color:var(--text2);">成本 ${fmtCurr(totalCostOrig,curr,dec)}</span>`;
+    const qtySummary  = `<span style="font-size:14px;color:var(--text2);">${totalQty.toLocaleString()} 股</span>`;
 
-    // Header row (always visible)
+    // Header row — always visible, shows aggregated info
     html += `<tr class="stock-header-row" onclick="toggleStock('${key}')">
       <td colspan="11">
-        <div style="display:flex;align-items:center;gap:0;">
+        <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;row-gap:4px;">
           <span class="stock-toggle${isOpen?' open':''}" data-key="${key}">+</span>
-          <span style="font-weight:700;font-size:15px;min-width:70px;">${s.ticker}</span>
-          <span style="color:var(--text2);font-size:13px;margin-right:12px;">${s.name}</span>
-          <span class="curr-badge curr-${s.curr}" style="margin-right:12px;">${s.curr}</span>
+          <span style="font-weight:700;font-size:16px;min-width:75px;">${ticker}</span>
+          <span style="color:var(--text2);font-size:13px;margin-right:12px;">${g.name}</span>
+          <span class="curr-badge curr-${curr}" style="margin-right:12px;">${curr}</span>
           ${qtySummary}
+          <span style="margin:0 10px;color:var(--border2);">|</span>
+          ${costSummary}
           <span style="margin:0 10px;color:var(--border2);">|</span>
           ${mvSummary}
           <span style="margin:0 10px;color:var(--border2);">|</span>
           ${pnlSummary}
-          <span style="flex:1;"></span>
-          <span onclick="event.stopPropagation();" style="display:flex;gap:4px;">
-            <button class="btn-icon" onclick="openEditStock(${i})">修改</button>
-            <button class="btn-icon danger" onclick="openEditStock(${i},'dispose')">處分</button>
+          <span style="flex:1;min-width:8px;"></span>
+          <span onclick="event.stopPropagation();" style="display:flex;gap:4px;flex-shrink:0;">
+            <button class="btn-icon" onclick="openAddStock('${ticker}')">+ 新增筆</button>
           </span>
         </div>
       </td>
     </tr>`;
 
-    // Detail row (collapsible)
+    // Detail rows — one per transaction record, collapsible
+    const detailRows = g.rows.map(({s,i})=>{
+      const cost    = s.cost * s.qty;
+      const mv      = p > 0 ? p * s.qty : 0;
+      const cTWD    = toTWD(cost, curr);
+      const mTWD    = toTWD(mv, curr);
+      const rowPnl  = mTWD - cTWD;
+      const rowPct  = cTWD > 0 ? (rowPnl/cTWD)*100 : 0;
+      const rowPc   = rowPnl>=0?'pos':'neg';
+      const rowPnlO = mv - cost;
+      const mvCell  = p>0 ? `${fmtTWD(mTWD)}${showOrig?`<br><span style="font-size:11px;color:var(--text2);">${fmtCurr(mv,curr,dec)}</span>`:''}` : '--';
+      const pnlCell = p>0 ? `${rowPnl>=0?'+':'-'}${fmtTWD(Math.abs(rowPnl))}${showOrig?`<br><span style="font-size:11px;color:${rowPnlO>=0?'var(--pos)':'var(--neg)'};">${rowPnlO>=0?'+':''}${fmtCurr(rowPnlO,curr,dec)}</span>`:''}` : '--';
+      return `<tr style="background:var(--bg2);">
+        <td style="padding:8px 12px;font-size:14px;">${s.date}</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;">${fmtCurr(s.cost,curr,dec)}</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;">${s.qty.toLocaleString()}</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;">${fmtCurr(cost,curr,dec)}</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;">${p>0?fmtCurr(p,curr,dec):'<span style="color:var(--text3)">未設定</span>'}</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;">${mvCell}</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;" class="${rowPc}">${pnlCell}</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;" class="${rowPc}">${p>0?fmtPct(rowPct):'--'}</td>
+        <td style="padding:8px 12px;text-align:right;">
+          <span style="display:flex;gap:4px;justify-content:flex-end;">
+            <button class="btn-icon" onclick="openEditStock(${i})">修改</button>
+            <button class="btn-icon danger" onclick="openEditStock(${i},'dispose')">處分</button>
+          </span>
+        </td>
+      </tr>`;
+    }).join('');
+
+    // Aggregate subtotal row for this ticker (show when expanded and >1 row)
+    let subtotalRow = '';
+    if(g.rows.length > 1){
+      const pcSub = pnlTWD>=0?'pos':'neg';
+      const mvCellSub = p>0 ? `${fmtTWD(totalMVTWD)}${showOrig?`<br><span style="font-size:11px;color:var(--text2);">${fmtCurr(totalMVOrig,curr,dec)}</span>`:''}` : '--';
+      const pnlCellSub = p>0 ? `${pnlTWD>=0?'+':'-'}${fmtTWD(Math.abs(pnlTWD))}${showOrig?`<br><span style="font-size:11px;color:${pnlOrig>=0?'var(--pos)':'var(--neg)'};">${pnlOrig>=0?'+':''}${fmtCurr(pnlOrig,curr,dec)}</span>`:''}` : '--';
+      subtotalRow = `<tr style="background:var(--bg3);font-weight:600;">
+        <td style="padding:8px 12px;font-size:13px;color:var(--text2);">合計（均價 ${fmtCurr(avgCost,curr,dec)}）</td>
+        <td style="padding:8px 12px;font-size:13px;text-align:right;color:var(--text2);">—</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;">${totalQty.toLocaleString()}</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;">${fmtCurr(totalCostOrig,curr,dec)}</td>
+        <td style="padding:8px 12px;font-size:13px;text-align:right;color:var(--text2);">—</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;">${mvCellSub}</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;" class="${pcSub}">${pnlCellSub}</td>
+        <td style="padding:8px 12px;font-size:14px;text-align:right;" class="${pcSub}">${p>0?fmtPct(pct):'--'}</td>
+        <td></td>
+      </tr>`;
+    }
+
     html += `<tr class="stock-detail-row${isOpen?'':' collapsed'}" data-key="${key}">
-      <td colspan="11" style="padding:0;">
+      <td colspan="11" style="padding:0;border-bottom:2px solid var(--border2);">
         <table style="width:100%;border-collapse:collapse;">
           <thead>
             <tr style="background:var(--bg3);">
-              <th style="padding:6px 12px;font-size:11px;font-weight:500;color:var(--text2);text-align:left;">日期</th>
-              <th style="padding:6px 12px;font-size:11px;font-weight:500;color:var(--text2);text-align:right;">買入均價</th>
-              <th style="padding:6px 12px;font-size:11px;font-weight:500;color:var(--text2);text-align:right;">數量</th>
-              <th style="padding:6px 12px;font-size:11px;font-weight:500;color:var(--text2);text-align:right;">總成本</th>
-              <th style="padding:6px 12px;font-size:11px;font-weight:500;color:var(--text2);text-align:right;">現價</th>
-              <th style="padding:6px 12px;font-size:11px;font-weight:500;color:var(--text2);text-align:right;">總市值(TWD/原幣)</th>
-              <th style="padding:6px 12px;font-size:11px;font-weight:500;color:var(--text2);text-align:right;">損益(TWD/原幣)</th>
-              <th style="padding:6px 12px;font-size:11px;font-weight:500;color:var(--text2);text-align:right;">損益%</th>
+              <th style="padding:6px 12px;font-size:12px;font-weight:500;color:var(--text2);text-align:left;">買入日期</th>
+              <th style="padding:6px 12px;font-size:12px;font-weight:500;color:var(--text2);text-align:right;">買入均價</th>
+              <th style="padding:6px 12px;font-size:12px;font-weight:500;color:var(--text2);text-align:right;">數量</th>
+              <th style="padding:6px 12px;font-size:12px;font-weight:500;color:var(--text2);text-align:right;">總成本</th>
+              <th style="padding:6px 12px;font-size:12px;font-weight:500;color:var(--text2);text-align:right;">現價</th>
+              <th style="padding:6px 12px;font-size:12px;font-weight:500;color:var(--text2);text-align:right;">總市值(TWD/原幣)</th>
+              <th style="padding:6px 12px;font-size:12px;font-weight:500;color:var(--text2);text-align:right;">損益(TWD/原幣)</th>
+              <th style="padding:6px 12px;font-size:12px;font-weight:500;color:var(--text2);text-align:right;">損益%</th>
+              <th></th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td style="padding:8px 12px;font-size:14px;">${s.date}</td>
-              <td style="padding:8px 12px;font-size:14px;text-align:right;">${fmtCurr(s.cost,s.curr,dec)}</td>
-              <td style="padding:8px 12px;font-size:14px;text-align:right;">${s.qty.toLocaleString()}</td>
-              <td style="padding:8px 12px;font-size:14px;text-align:right;">${fmtCurr(cost,s.curr,dec)}</td>
-              <td style="padding:8px 12px;font-size:14px;text-align:right;">${p>0?fmtCurr(p,s.curr,dec):'<span style="color:var(--text3)">未設定</span>'}</td>
-              <td style="padding:8px 12px;font-size:14px;text-align:right;">${mvCell}</td>
-              <td style="padding:8px 12px;font-size:14px;text-align:right;" class="${pc}">${pnlCell}</td>
-              <td style="padding:8px 12px;font-size:14px;text-align:right;" class="${pc}">${p>0?fmtPct(pct):'--'}</td>
-            </tr>
-          </tbody>
+          <tbody>${detailRows}${subtotalRow}</tbody>
         </table>
       </td>
     </tr>`;
@@ -802,11 +905,21 @@ function updateCash(curr, val){
 // ════════════════════════════════════════
 // ADD STOCK
 // ════════════════════════════════════════
-function openAddStock(){
+function openAddStock(prefillTicker){
   document.getElementById('fs_date').value = new Date().toISOString().split('T')[0];
   ['fs_ticker','fs_name','fs_cost','fs_qty'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('fs_curr').value = 'TWD';
   document.getElementById('fs_mkt').value = 'TW';
+  // Pre-fill ticker/name/curr if adding another lot to existing stock
+  if(prefillTicker){
+    const existing = st.stocks[cu].find(s=>s.ticker===prefillTicker);
+    if(existing){
+      document.getElementById('fs_ticker').value = existing.ticker;
+      document.getElementById('fs_name').value   = existing.name;
+      document.getElementById('fs_curr').value   = existing.curr;
+      document.getElementById('fs_mkt').value    = existing.mkt;
+    }
+  }
   const cfg = USERS_CFG[cu];
   document.getElementById('btnConfirmAdd').className = 'btn btn-primary btn-'+cfg.colorClass;
   openModal('modalAddStock');
@@ -822,8 +935,8 @@ function confirmAddStock(){
   const mkt = document.getElementById('fs_mkt').value;
   if(!t||!n||!d||isNaN(c)||isNaN(q)||c<=0||q<=0){ alert('請填寫所有欄位，數值需大於0'); return; }
   st.stocks[cu].push({ticker:t, name:n, date:d, cost:c, qty:q, curr, mkt});
-  // init price if not set
   if(!st.prices[t]) st.prices[t] = 0;
+  sortData();
   save();
   closeModal('modalAddStock');
   renderPortfolio();
@@ -881,6 +994,7 @@ function confirmEditStock(){
   s.date = document.getElementById('es_date').value;
   s.cost = parseFloat(document.getElementById('es_cost').value)||s.cost;
   s.qty = parseInt(document.getElementById('es_qty').value)||s.qty;
+  sortData();
   save();
   closeModal('modalEditStock');
   renderPortfolio();
@@ -929,6 +1043,7 @@ function confirmDispose(){
   s.qty -= qty;
   if(s.qty <= 0){ st.stocks[cu].splice(editStockIndex, 1); }
 
+  sortData();
   save();
   closeModal('modalEditStock');
   renderPortfolio();
@@ -990,8 +1105,10 @@ function renderDisposalTable(){
     if(!(ticker in disposalOpen)) disposalOpen[ticker] = false; // default collapsed
     const isOpen = disposalOpen[ticker];
 
-    const rows = g.records.map(d=>{
+    const rows = g.records.map((d,ri)=>{
       const pc2 = d.pnlTWD>=0?'pos':'neg';
+      // find global index in st.disposals[cu]
+      const globalIdx = st.disposals[cu].indexOf(d);
       return `<tr>
         <td>${d.date}</td>
         <td class="right">${fmtCurr(d.buyCost,curr,dec)}</td>
@@ -1002,6 +1119,7 @@ function renderDisposalTable(){
         <td class="right ${pc2}">${d.pnlTWD>=0?'+':'-'}${fmtTWD(Math.abs(d.pnlTWD))}</td>
         <td class="right ${pc2}">${(d.revenueTotal-d.costTotal)>=0?'+':''}${fmtCurr(d.revenueTotal-d.costTotal,curr,dec)}</td>
         <td class="right ${pc2}">${fmtPct(d.pct)}</td>
+        <td><button class="btn-icon" onclick="openEditDisposal(${globalIdx})">修改</button></td>
       </tr>`;
     }).join('');
 
@@ -1012,11 +1130,11 @@ function renderDisposalTable(){
           <span class="dgh-title">${g.ticker}</span>
           <span class="dgh-sub">${g.name}</span>
           <span class="curr-badge curr-${curr}">${curr}</span>
-          <span style="font-size:13px;color:var(--text2);">${g.records.length} 筆</span>
+          <span style="font-size:14px;color:var(--text2);">${subQty.toLocaleString()} 股 &nbsp;·&nbsp; ${g.records.length} 筆</span>
         </div>
         <div style="text-align:right;">
           <div class="dgh-pnl ${pc}">${subPnlTWD>=0?'+':'-'}${fmtTWD(Math.abs(subPnlTWD))} TWD</div>
-          <div style="font-size:12px;color:var(--text2);">原幣 ${subPnlOrig>=0?'+':''}${fmtCurr(subPnlOrig,curr,dec)} &nbsp;${fmtPct(subPct)}</div>
+          <div style="font-size:13px;color:var(--text2);">原幣 ${subPnlOrig>=0?'+':''}${fmtCurr(subPnlOrig,curr,dec)} &nbsp;${fmtPct(subPct)}</div>
         </div>
       </div>
       <div class="disposal-body-wrap${isOpen?'':' collapsed'}" data-ticker="${ticker}">
@@ -1028,7 +1146,7 @@ function renderDisposalTable(){
               <th class="right">股數</th>
               <th class="right">成本(${curr})</th><th class="right">處分金額(${curr})</th>
               <th class="right">損益(TWD)</th><th class="right">損益(${curr})</th>
-              <th class="right">損益%</th>
+              <th class="right">損益%</th><th></th>
             </tr></thead>
             <tbody>
               ${rows}
@@ -1041,6 +1159,7 @@ function renderDisposalTable(){
                 <td class="right ${pc}">${subPnlTWD>=0?'+':'-'}${fmtTWD(Math.abs(subPnlTWD))}</td>
                 <td class="right ${pc}">${subPnlOrig>=0?'+':''}${fmtCurr(subPnlOrig,curr,dec)}</td>
                 <td class="right ${pc}">${fmtPct(subPct)}</td>
+                <td></td>
               </tr>
             </tbody>
           </table>
@@ -1200,6 +1319,9 @@ function importJSON(input){
       if(!confirm('匯入將覆蓋目前所有資料，確定繼續？')) return;
       st = data;
       if(!st.themes) st.themes = ['',''];
+      // Sort all data after import
+      const prevCu = cu;
+      [0,1].forEach(ui=>{ cu=ui; sortData(); }); cu=prevCu;
       save();
       renderWelcome();
       alert('匯入成功！');
@@ -1209,6 +1331,86 @@ function importJSON(input){
   };
   reader.readAsText(file);
   input.value = '';
+}
+
+// ════════════════════════════════════════
+// EDIT DISPOSAL RECORD
+// ════════════════════════════════════════
+let editDisposalIndex = -1;
+
+function openEditDisposal(globalIdx){
+  editDisposalIndex = globalIdx;
+  const d = st.disposals[cu][globalIdx];
+  const curr = d.curr;
+  const dec = (curr==='USD'||curr==='HKD')?2:0;
+
+  document.getElementById('ed_info').textContent =
+    `${d.ticker} ${d.name}　買入均價 ${fmtCurr(d.buyCost,curr,dec)}`;
+  document.getElementById('ed_date').value = d.date;
+  document.getElementById('ed_qty').value = d.qty;
+  document.getElementById('ed_price').value = d.disposePrice;
+  document.getElementById('ed_fee').value = d.fee || 0;
+  document.getElementById('ed_preview').textContent = '--';
+  document.getElementById('ed_preview').className = '';
+
+  const cfg = USERS_CFG[cu];
+  document.getElementById('btnConfirmEditDisposal').className = 'btn btn-primary btn-' + cfg.colorClass;
+
+  calcEditDisposalPreview();
+  openModal('modalEditDisposal');
+}
+
+function calcEditDisposalPreview(){
+  const d = st.disposals[cu][editDisposalIndex];
+  if(!d) return;
+  const qty   = parseInt(document.getElementById('ed_qty').value)   || 0;
+  const price = parseFloat(document.getElementById('ed_price').value) || 0;
+  const fee   = parseFloat(document.getElementById('ed_fee').value)  || 0;
+  if(!qty || !price){ document.getElementById('ed_preview').textContent='--'; return; }
+  const cost    = d.buyCost * qty;
+  const revenue = price * qty - fee;
+  const pnlTWD  = toTWD(revenue - cost, d.curr);
+  const el = document.getElementById('ed_preview');
+  el.textContent = (pnlTWD>=0?'+':'-') + fmtTWD(Math.abs(pnlTWD));
+  el.className = pnlTWD>=0?'pos':'neg';
+}
+
+function confirmEditDisposal(){
+  const d = st.disposals[cu][editDisposalIndex];
+  if(!d) return;
+  const qty   = parseInt(document.getElementById('ed_qty').value)    || 0;
+  const price = parseFloat(document.getElementById('ed_price').value) || 0;
+  const fee   = parseFloat(document.getElementById('ed_fee').value)  || 0;
+  const date  = document.getElementById('ed_date').value;
+  if(!qty||!price||!date){ alert('請填寫所有欄位'); return; }
+
+  const cost    = d.buyCost * qty;
+  const revenue = price * qty - fee;
+  const pnlOrig = revenue - cost;
+  const pnlTWD  = toTWD(pnlOrig, d.curr);
+  const pct     = cost > 0 ? (pnlOrig / cost) * 100 : 0;
+
+  d.date         = date;
+  d.qty          = qty;
+  d.disposePrice = price;
+  d.fee          = fee;
+  d.costTotal    = cost;
+  d.revenueTotal = revenue;
+  d.pnlTWD       = pnlTWD;
+  d.pct          = pct;
+
+  sortData();
+  save();
+  closeModal('modalEditDisposal');
+  renderDisposalTable();
+}
+
+function deleteDisposalRecord(){
+  if(!confirm('確定刪除此筆處分紀錄？此操作無法復原。')) return;
+  st.disposals[cu].splice(editDisposalIndex, 1);
+  save();
+  closeModal('modalEditDisposal');
+  renderDisposalTable();
 }
 
 // ════════════════════════════════════════
@@ -1225,6 +1427,8 @@ document.querySelectorAll('.overlay').forEach(el=>{
 // ════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════
+// Sort both users' data on startup
+[0,1].forEach(ui=>{ cu=ui; sortData(); }); cu=0;
 renderWelcome();
 </script>
 </body>
