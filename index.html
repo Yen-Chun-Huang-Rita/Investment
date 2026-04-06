@@ -327,8 +327,19 @@ tr:hover td{background:var(--bg2);}
       </div>
     </div>
     <div class="chart-card">
-      <h3>總資產趨勢（示意）</h3>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <div>
+          <h3 style="margin-bottom:2px;">總資產趨勢</h3>
+          <span style="font-size:13px;color:var(--text2);" id="snapshotCount"></span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn btn-sm" id="snapshotBtn" onclick="recordSnapshot()">📌 記錄今日資產</button>
+          <button class="collapse-all-btn" onclick="toggleSnapshotList()" id="snapshotListToggle" style="display:none;">管理記錄</button>
+        </div>
+      </div>
       <div class="cw" style="height:220px;"><canvas id="trendChart"></canvas></div>
+      <!-- Snapshot list (hidden by default) -->
+      <div id="snapshotList" class="hidden" style="margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;max-height:200px;overflow-y:auto;"></div>
     </div>
   </div>
 </div>
@@ -498,9 +509,10 @@ function defaultState(){
     stocks: [[],[]],
     disposals: [[],[]],
     cash: [{TWD:'',USD:'',JPY:'',HKD:''},{TWD:'',USD:'',JPY:'',HKD:''}],
-    prices: {}, // {TICKER: price}
+    prices: {},
     fx: {USD:32.5, JPY:0.215, HKD:4.1},
-    themes: ['','']   // per-user theme class
+    themes: ['',''],
+    snapshots: [[],[]]   // per-user: [{date, total, mv, cash}]
   };
 }
 
@@ -1237,13 +1249,109 @@ function renderDashboard(){
   document.getElementById('pnlWrap').style.height = Math.max(210, pnlStocks.length*46+60)+'px';
   charts.pnlChart = new Chart(document.getElementById('pnlChart'),{type:'bar',data:{labels:pnlStocks.map(s=>s.ticker),datasets:[{data:pnlVals,backgroundColor:pnlVals.map(v=>v>=0?'#1D9E75':'#D85A30'),borderRadius:4,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>fmtPct(ctx.raw)}}},scales:{x:{grid:{color:'rgba(128,128,128,0.1)'},ticks:{font:{size:11},color:'#888',callback:v=>v.toFixed(0)+'%'}},y:{grid:{display:false},ticks:{font:{size:12}}}}}});
 
-  // trend (示意)
+  // ── Trend chart from real snapshots
+  if(!st.snapshots) st.snapshots = [[],[]];
+  const snaps = st.snapshots[cu];
+  const snapshotCount = document.getElementById('snapshotCount');
+  const listToggle = document.getElementById('snapshotListToggle');
+
+  if(snaps.length === 0){
+    snapshotCount.textContent = '尚無記錄，更新市價後按「記錄今日資產」開始累積';
+    listToggle.style.display = 'none';
+    if(charts.trendChart){ charts.trendChart.destroy(); delete charts.trendChart; }
+    document.getElementById('trendChart').getContext('2d').clearRect(0,0,999,999);
+  } else {
+    snapshotCount.textContent = `共 ${snaps.length} 筆記錄`;
+    listToggle.style.display = '';
+    const labels = snaps.map(s=>s.date);
+    const vals   = snaps.map(s=>s.total);
+    if(charts.trendChart) charts.trendChart.destroy();
+    charts.trendChart = new Chart(document.getElementById('trendChart'),{
+      type:'line',
+      data:{labels,datasets:[{
+        data:vals, borderColor:uc, backgroundColor:uc+'22',
+        fill:true, tension:0.3,
+        pointBackgroundColor:uc, pointRadius:5, pointHoverRadius:8
+      }]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{
+          title:ctx=>ctx[0].label,
+          label:ctx=>'總資產：'+fmtTWD(ctx.raw)
+        },displayColors:false,backgroundColor:'rgba(20,20,20,0.9)',titleColor:'#aaa',bodyColor:'#fff',padding:10}},
+        scales:{
+          x:{grid:{display:false},ticks:{font:{size:12},color:'#888',maxRotation:45}},
+          y:{grid:{color:'rgba(128,128,128,0.1)'},ticks:{font:{size:11},color:'#888',
+            callback:v=>'NT$'+(v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v)}}
+        }
+      }
+    });
+    renderSnapshotList();
+  }
+}
+
+// ════════════════════════════════════════
+// SNAPSHOTS
+// ════════════════════════════════════════
+function recordSnapshot(){
+  if(!st.snapshots) st.snapshots = [[],[]];
   const d = calcUserSummary(cu);
-  const base = d.total * 0.82;
-  const months = ['10月','11月','12月','1月','2月','3月','當前'];
-  const tv = [.90,.94,.97,1.00,1.02,1.04].map((f,i)=>Math.round(base/0.82*f*(0.98+Math.random()*.035)));
-  tv.push(Math.round(d.total));
-  charts.trendChart = new Chart(document.getElementById('trendChart'),{type:'line',data:{labels:months,datasets:[{data:tv,borderColor:uc,backgroundColor:uc+'22',fill:true,tension:0.4,pointBackgroundColor:uc,pointRadius:5,pointHoverRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{title:ctx=>ctx[0].label,label:ctx=>'總資產：'+fmtTWD(ctx.raw)},displayColors:false,backgroundColor:'rgba(20,20,20,0.9)',titleColor:'#aaa',bodyColor:'#fff',padding:10}},scales:{x:{grid:{display:false},ticks:{font:{size:11},color:'#888'}},y:{grid:{color:'rgba(128,128,128,0.1)'},ticks:{font:{size:10},color:'#888',callback:v=>'NT$'+(v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(0)+'K':v)}}}}});
+  if(d.total === 0){ alert('目前總資產為零，請先更新市價再記錄。'); return; }
+
+  const today = new Date().toISOString().slice(0,10);
+  const snaps = st.snapshots[cu];
+
+  // If same date already exists, update it instead of adding a new one
+  const existing = snaps.findIndex(s=>s.date===today);
+  const record = { date:today, total:Math.round(d.total), mv:Math.round(d.tMV_TWD), cash:Math.round(d.cashTWD) };
+
+  if(existing>=0){
+    if(!confirm(`今天（${today}）已有一筆記錄（${fmtTWD(snaps[existing].total)}），要更新為目前數值（${fmtTWD(record.total)}）嗎？`)) return;
+    snaps[existing] = record;
+  } else {
+    snaps.push(record);
+    snaps.sort((a,b)=>a.date<b.date?-1:1);
+  }
+
+  save();
+  const btn = document.getElementById('snapshotBtn');
+  btn.textContent = '✓ 已記錄';
+  btn.style.background = 'var(--pos)';
+  btn.style.color = '#fff';
+  btn.style.border = 'none';
+  setTimeout(()=>{ btn.textContent='📌 記錄今日資產'; btn.style.cssText=''; }, 1800);
+  renderDashboard();
+}
+
+function renderSnapshotList(){
+  const snaps = st.snapshots[cu];
+  const el = document.getElementById('snapshotList');
+  if(!el) return;
+  el.innerHTML = snaps.length === 0 ? '<div style="color:var(--text2);font-size:14px;">尚無記錄</div>' :
+    `<div style="font-size:13px;color:var(--text2);margin-bottom:8px;">點擊日期旁的 × 刪除該筆記錄</div>` +
+    [...snaps].reverse().map((s,ri)=>{
+      const i = snaps.length - 1 - ri; // real index
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;">
+        <span style="color:var(--text2);">${s.date}</span>
+        <span style="font-weight:600;">${fmtTWD(s.total)}</span>
+        <span style="font-size:12px;color:var(--text2);">持股 ${fmtTWD(s.mv)} ／ 現金 ${fmtTWD(s.cash)}</span>
+        <button onclick="deleteSnapshot(${i})" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3);padding:0 4px;" title="刪除">×</button>
+      </div>`;
+    }).join('');
+}
+
+function deleteSnapshot(i){
+  if(!confirm('確定刪除這筆快照紀錄？')) return;
+  st.snapshots[cu].splice(i,1);
+  save();
+  renderDashboard();
+}
+
+function toggleSnapshotList(){
+  const el = document.getElementById('snapshotList');
+  const btn = document.getElementById('snapshotListToggle');
+  const hidden = el.classList.toggle('hidden');
+  btn.textContent = hidden ? '管理記錄' : '收合記錄';
+  if(!hidden) renderSnapshotList();
 }
 
 // ════════════════════════════════════════
@@ -1405,6 +1513,7 @@ document.querySelectorAll('.overlay').forEach(el=>{
 // ════════════════════════════════════════
 // Sort both users' data on startup
 [0,1].forEach(ui=>{ cu=ui; sortData(); }); cu=0;
+if(!st.snapshots) st.snapshots = [[],[]];
 renderWelcome();
 </script>
 </body>
