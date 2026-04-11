@@ -1610,14 +1610,27 @@ document.getElementById('themePicker').addEventListener('click', e=>{
 });
 
 // ════════════════════════════════════════
-// IMPORT / EXPORT JSON
+// IMPORT / EXPORT JSON（只匯出/匯入當前使用者）
 // ════════════════════════════════════════
 function exportJSON(){
-  const blob = new Blob([JSON.stringify(st, null, 2)], {type:'application/json'});
+  // 只匯出當前使用者的資料
+  const userData = {
+    _version: 1,
+    _user: USERS_CFG[cu].key,
+    _name: getUserName(cu),
+    stocks:    st.stocks[cu],
+    disposals: st.disposals[cu],
+    cash:      st.cash[cu],
+    snapshots: st.snapshots[cu],
+    prices:    st.prices,
+    fx:        st.fx,
+  };
+  const blob = new Blob([JSON.stringify(userData, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `investment_backup_${new Date().toISOString().slice(0,10)}.json`;
+  const name = getUserName(cu);
+  a.download = `${name}_backup_${new Date().toISOString().slice(0,10)}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -1629,37 +1642,62 @@ function importJSON(input){
   reader.onload = async e=>{
     try{
       const data = JSON.parse(e.target.result);
-      if(!data.stocks || !data.names){ alert('JSON 格式不正確，請確認是本系統匯出的檔案'); return; }
-      if(!confirm('匯入將覆蓋目前所有資料，確定繼續？')) return;
-      st = data;
-      if(!st.themes)    st.themes    = ['',''];
-      if(!st.snapshots) st.snapshots = [[],[]];
-      if(!st.passwords) st.passwords = {};
-      const prevCu = cu;
-      [0,1].forEach(ui=>{ cu=ui; sortData(); }); cu=prevCu;
-      saveLocal();
 
-      // 上傳兩個人的資料到雲端
-      setSyncStatus('loading','上傳資料到雲端...');
-      const url = getGasUrl();
-      if(url && !url.includes('YOUR_GAS_URL')){
-        try{
-          const sharedData = { prices:st.prices, fx:st.fx, names:st.names, passwords:st.passwords };
-          await Promise.all([
-            gasGetWithPayload('save', {user:'u0', data:{stocks:st.stocks[0],disposals:st.disposals[0],cash:st.cash[0],themes:st.themes[0],snapshots:st.snapshots[0]}}),
-            gasGetWithPayload('save', {user:'u1', data:{stocks:st.stocks[1],disposals:st.disposals[1],cash:st.cash[1],themes:st.themes[1],snapshots:st.snapshots[1]}}),
-            gasGetWithPayload('saveShared', {data:sharedData}),
-          ]);
-          setSyncStatus('ok','匯入完成，已同步至雲端');
-        } catch(e){
-          setSyncStatus('err','匯入成功，但雲端同步失敗');
-        }
-      } else {
-        setSyncStatus('err','離線模式（GAS URL 未設定）');
+      // 判斷是新格式（單人）或舊格式（雙人全包）
+      const isNewFormat = data._version === 1 && data._user !== undefined;
+      const isOldFormat = Array.isArray(data.stocks) && data.names;
+
+      if(!isNewFormat && !isOldFormat){
+        alert('JSON 格式不正確，請確認是本系統匯出的檔案'); return;
       }
 
-      renderWelcome();
-      alert('匯入成功！資料已同步至雲端。');
+      const userName = getUserName(cu);
+
+      if(isNewFormat){
+        // 新格式：只還原當前使用者
+        if(!confirm(`匯入將覆蓋「${userName}」的資料，另一位使用者不受影響。確定繼續？`)) return;
+        st.stocks[cu]    = data.stocks    || [];
+        st.disposals[cu] = data.disposals || [];
+        st.cash[cu]      = data.cash      || {TWD:'',USD:'',JPY:'',HKD:''};
+        st.snapshots[cu] = data.snapshots || [];
+        if(data.prices) st.prices = data.prices;
+        if(data.fx)     st.fx     = data.fx;
+      } else {
+        // 舊格式：警告後只還原當前使用者對應的資料
+        if(!confirm(`這是舊版備份檔（含兩人資料）。
+匯入將只還原「${userName}」的資料，另一位使用者不受影響。確定繼續？`)) return;
+        st.stocks[cu]    = data.stocks[cu]    || [];
+        st.disposals[cu] = data.disposals[cu] || [];
+        st.cash[cu]      = data.cash[cu]      || {TWD:'',USD:'',JPY:'',HKD:''};
+        st.snapshots[cu] = (data.snapshots && data.snapshots[cu]) || [];
+        if(data.prices) st.prices = data.prices;
+        if(data.fx)     st.fx     = data.fx;
+        if(data.names && data.names[cu]) st.names[cu] = data.names[cu];
+      }
+
+      sortData();
+      saveLocal();
+
+      // 只上傳當前使用者的資料到雲端
+      setSyncStatus('loading','上傳資料到雲端...');
+      try{
+        const sharedData = { prices:st.prices, fx:st.fx, names:st.names, passwords:st.passwords };
+        const ukey = USERS_CFG[cu].key;
+        await Promise.all([
+          gasGetWithPayload('save', {user:ukey, data:{
+            stocks:st.stocks[cu], disposals:st.disposals[cu],
+            cash:st.cash[cu], themes:st.themes[cu], snapshots:st.snapshots[cu]
+          }}),
+          gasGetWithPayload('saveShared', {data:sharedData}),
+        ]);
+        setSyncStatus('ok','匯入完成，已同步至雲端');
+      } catch(e){
+        setSyncStatus('err','匯入成功，但雲端同步失敗');
+      }
+
+      renderPortfolio();
+      renderPricePage();
+      alert(`「${userName}」的資料匯入成功！`);
     }catch(err){
       alert('解析失敗：' + err.message);
     }
