@@ -201,6 +201,13 @@ tr:hover td{background:var(--bg2);}
 .page.active{display:block;}
 #mainApp{display:none;}
 
+/* ── SYNC DOT ── */
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+.sync-dot.ok{background:var(--pos);}
+.sync-dot.err{background:var(--neg);}
+.sync-dot.loading{background:#BA7517;animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+
 .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:1rem;}
 .empty-state{text-align:center;padding:2.5rem;color:var(--text2);font-size:16px;}
 
@@ -214,19 +221,21 @@ tr:hover td{background:var(--bg2);}
 <!-- ══ WELCOME ══ -->
 <div id="welcomeScreen" class="welcome">
   <div class="welcome-logo">📈 家庭投資追蹤</div>
-  <div class="welcome-sub">選擇帳戶進入，資料儲存於本機</div>
+  <div class="welcome-sub">選擇帳戶進入，資料儲存於雲端</div>
   <div class="user-cards">
-    <div class="user-card u1" onclick="enterUser(0)">
+    <div class="user-card u1" onclick="tryEnterUser(0)">
       <button class="edit-name-btn" onclick="event.stopPropagation();editName(0)">✏️ 改名</button>
       <div class="avatar av1" id="av0">鈞</div>
       <h3 id="uname0">鈞逸</h3>
       <div class="stat" id="stat0">尚無持股</div>
+      <div id="pwdStatus0" style="font-size:12px;color:var(--text3);margin-top:4px;"></div>
     </div>
-    <div class="user-card u2" onclick="enterUser(1)">
+    <div class="user-card u2" onclick="tryEnterUser(1)">
       <button class="edit-name-btn" onclick="event.stopPropagation();editName(1)">✏️ 改名</button>
       <div class="avatar av2" id="av1">雁</div>
       <h3 id="uname1">雁君</h3>
       <div class="stat" id="stat1">尚無持股</div>
+      <div id="pwdStatus1" style="font-size:12px;color:var(--text3);margin-top:4px;"></div>
     </div>
   </div>
 </div>
@@ -252,6 +261,11 @@ tr:hover td{background:var(--bg2);}
       <button class="io-btn" onclick="exportJSON()">⬇ 匯出</button>
       <button class="io-btn" onclick="document.getElementById('fileInput').click()">⬆ 匯入</button>
       <input type="file" id="fileInput" accept=".json" onchange="importJSON(this)">
+      <button class="io-btn" onclick="openChangePwd()" title="設定密碼">🔑 密碼</button>
+      <div style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2);">
+        <span class="sync-dot" id="syncDot"></span>
+        <span id="syncText">--</span>
+      </div>
       <button class="btn btn-sm" onclick="goBack()">← 返回</button>
     </div>
   </div>
@@ -298,12 +312,16 @@ tr:hover td{background:var(--bg2);}
   <!-- PAGE 2: 市價 / 匯率 -->
   <div id="page2" class="page">
     <div class="price-section">
-      <h4>股票現價維護</h4>
-      <div class="section-label" style="margin-bottom:8px;">（依股票組合中的持股自動列出）</div>
+      <h4 style="margin-bottom:12px;">股票現價 &amp; 匯率</h4>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-u1" id="autoFetchBtn" onclick="autoFetchPrices()">🌐 自動抓取市價</button>
+        <span id="fetchStatus" style="font-size:13px;color:var(--text2);"></span>
+      </div>
+      <div class="section-label" style="margin-bottom:8px;">個股現價（可手動輸入，或使用自動抓取）</div>
       <div class="price-grid" id="priceGrid"></div>
     </div>
     <div class="price-section">
-      <h4>匯率維護（對台幣）</h4>
+      <h4>匯率（對台幣）</h4>
       <div class="fx-grid">
         <div class="fx-item"><label>USD → TWD</label><input type="number" id="fx_USD" step="0.01" placeholder="32.5" oninput="saveFX()"></div>
         <div class="fx-item"><label>JPY → TWD</label><input type="number" id="fx_JPY" step="0.001" placeholder="0.21" oninput="saveFX()"></div>
@@ -345,6 +363,51 @@ tr:hover td{background:var(--bg2);}
 </div>
 
 <!-- ══ MODALS ══ -->
+
+<!-- Password Entry -->
+<div class="overlay hidden" id="modalPassword">
+  <div class="modal" style="max-width:360px;">
+    <div class="modal-title" id="pwdModalTitle">輸入密碼</div>
+    <div style="text-align:center;margin-bottom:1.25rem;">
+      <div class="avatar" id="pwdModalAvatar" style="margin:0 auto 0.75rem;"></div>
+      <div style="font-size:15px;font-weight:500;" id="pwdModalName"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:0.5rem;">
+      <input type="password" id="pwdInput" placeholder="請輸入密碼" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')confirmPassword()">
+    </div>
+    <div style="font-size:13px;color:var(--neg);min-height:20px;margin-bottom:0.75rem;" id="pwdError"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modalPassword')">取消</button>
+      <button class="btn btn-primary" id="btnConfirmPwd" onclick="confirmPassword()">進入</button>
+    </div>
+  </div>
+</div>
+
+<!-- Change / Set Password -->
+<div class="overlay hidden" id="modalChangePwd">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-title" id="changePwdTitle">設定密碼</div>
+    <div class="form-group" style="margin-bottom:10px;" id="oldPwdGroup">
+      <label class="form-label">目前密碼</label>
+      <input type="password" id="inputOldPwd" placeholder="輸入目前密碼">
+    </div>
+    <div class="form-group" style="margin-bottom:10px;">
+      <label class="form-label">新密碼</label>
+      <input type="password" id="inputNewPwd" placeholder="至少 4 個字元">
+    </div>
+    <div class="form-group" style="margin-bottom:10px;">
+      <label class="form-label">確認新密碼</label>
+      <input type="password" id="inputNewPwd2" placeholder="再輸入一次">
+    </div>
+    <div style="font-size:13px;color:var(--neg);min-height:18px;margin-bottom:0.5rem;" id="changePwdError"></div>
+    <div class="modal-actions">
+      <button class="btn" id="btnRemovePwd" onclick="removePassword()" style="margin-right:auto;color:var(--neg);display:none;">移除密碼</button>
+      <button class="btn" onclick="closeModal('modalChangePwd')">取消</button>
+      <button class="btn btn-primary" id="btnConfirmChangePwd" onclick="confirmChangePassword()">儲存</button>
+    </div>
+  </div>
+</div>
 
 <!-- Edit Name -->
 <div class="overlay hidden" id="modalEditName">
@@ -496,13 +559,13 @@ const USERS_CFG = [
   {key:'u1',colorClass:'u2',color:'#3B6D11',lightColor:'#EAF3DE'},
 ];
 
-let cu = 0; // current user index
+let cu = 0;
 let editNameTarget = 0;
 let editStockIndex = -1;
 let editMode = 'edit';
 let charts = {};
 
-// Default state per user
+// ── 預設資料結構
 function defaultState(){
   return {
     names: ['鈞逸','雁君'],
@@ -512,42 +575,126 @@ function defaultState(){
     prices: {},
     fx: {USD:32.5, JPY:0.215, HKD:4.1},
     themes: ['',''],
-    snapshots: [[],[]]   // per-user: [{date, total, mv, cash}]
+    snapshots: [[],[]],
+    passwords: {}   // {u0: hash, u1: hash} — synced to cloud
   };
 }
 
-function load(){
-  try{ return JSON.parse(localStorage.getItem('invTracker') || 'null') || defaultState(); }
+// ── localStorage（離線備份 + 快取）
+function loadLocal(){
+  try{ return JSON.parse(localStorage.getItem('invTracker')||'null')||defaultState(); }
   catch(e){ return defaultState(); }
 }
-function save(){ localStorage.setItem('invTracker', JSON.stringify(st)); }
+function saveLocal(){ localStorage.setItem('invTracker', JSON.stringify(st)); }
+
+// ── GAS 雲端同步
+// ★ 請把你的 GAS 部署 URL 填在這裡 ★
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyxQaHtm0NvtYBPDq6Esn8y1bEGvAnSPCcavAGgqW1nVktPsXLqviVNRUs38EF7hEdC0A/exec';
+
+function getGasUrl(){ return GAS_URL; }
+
+// 每個使用者的個人資料欄位
+const USER_FIELDS = ['stocks','disposals','cash','themes','snapshots'];
+// 共用資料欄位（兩人共用同一份市價/匯率/密碼）
+const SHARED_FIELDS = ['prices','fx','names','passwords'];
+
+async function cloudLoad(ui){
+  const url = getGasUrl();
+  if(!url || url.includes('YOUR_GAS_URL')){
+    setSyncStatus('err','請將 GAS URL 填入程式碼');
+    return false;
+  }
+  setSyncStatus('loading','同步中...');
+  try {
+    const ukey = USERS_CFG[ui].key;
+    const [uRes, sRes] = await Promise.all([
+      gasGet({action:'load', user:ukey}),
+      gasGet({action:'loadShared'}),
+    ]);
+    if(uRes && uRes.ok && uRes.data){
+      if(uRes.data.stocks    !== undefined) st.stocks[ui]    = uRes.data.stocks;
+      if(uRes.data.disposals !== undefined) st.disposals[ui] = uRes.data.disposals;
+      if(uRes.data.cash      !== undefined) st.cash[ui]      = uRes.data.cash;
+      if(uRes.data.themes    !== undefined) st.themes[ui]    = uRes.data.themes;
+      if(uRes.data.snapshots !== undefined) st.snapshots[ui] = uRes.data.snapshots;
+    }
+    if(sRes && sRes.ok && sRes.data){
+      SHARED_FIELDS.forEach(f=>{ if(sRes.data[f]!==undefined) st[f] = sRes.data[f]; });
+    }
+    saveLocal();
+    const t = new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+    setSyncStatus('ok','已同步 '+t);
+    return true;
+  } catch(e){
+    setSyncStatus('err','同步失敗（離線模式）');
+    return false;
+  }
+}
+
+async function cloudSave(ui){
+  const url = getGasUrl();
+  saveLocal();
+  if(!url || url.includes('YOUR_GAS_URL')) return;
+  setSyncStatus('loading','儲存中...');
+  try {
+    const ukey = USERS_CFG[ui].key;
+    const userData = {
+      stocks:    st.stocks[ui],
+      disposals: st.disposals[ui],
+      cash:      st.cash[ui],
+      themes:    st.themes[ui],
+      snapshots: st.snapshots[ui],
+    };
+    const sharedData = { prices:st.prices, fx:st.fx, names:st.names, passwords:st.passwords };
+    await Promise.all([
+      gasGetWithPayload('save',    { user:ukey, data:userData }),
+      gasGetWithPayload('saveShared', { data:sharedData }),
+    ]);
+    const t = new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+    setSyncStatus('ok','已儲存 '+t);
+  } catch(e){
+    setSyncStatus('err','雲端儲存失敗（已存本機）');
+  }
+}
+
+// ── GAS 請求輔助（全部用 GET 避免 CORS 問題）
+async function gasGet(params){
+  const url = getGasUrl();
+  if(!url || url.includes('YOUR_GAS_URL')) return null;
+  const qs = Object.entries(params).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join('&');
+  const res = await fetch(`${url}?${qs}`);
+  return res.json();
+}
+
+async function gasGetWithPayload(action, data){
+  const url = getGasUrl();
+  if(!url || url.includes('YOUR_GAS_URL')) return null;
+  const payload = btoa(unescape(encodeURIComponent(JSON.stringify({action,...data}))));
+  const res = await fetch(`${url}?action=${action}&payload=${encodeURIComponent(payload)}`);
+  return res.json();
+}
+
+// save() 統一入口：存本機 + 雲端
+function save(){
+  saveLocal();
+  cloudSave(cu); // 非同步，不等待
+}
+
+function setSyncStatus(state, msg){
+  const dot  = document.getElementById('syncDot');
+  const text = document.getElementById('syncText');
+  if(!dot||!text) return;
+  dot.className = 'sync-dot ' + state;
+  text.textContent = msg;
+}
+
+let st = loadLocal();
 
 // Sort stocks and disposals for current user by date ascending
 function sortData(){
   st.stocks[cu].sort((a,b)=> a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
   st.disposals[cu].sort((a,b)=> a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
 }
-
-function manualSave(){
-  save();
-  const btn = document.getElementById('saveBtn');
-  if(!btn) return;
-  const orig = btn.textContent;
-  btn.textContent = '✓ 已儲存';
-  btn.style.background = 'var(--pos)';
-  btn.style.color = '#fff';
-  btn.style.borderColor = 'var(--pos)';
-  btn.disabled = true;
-  setTimeout(()=>{
-    btn.textContent = orig;
-    btn.style.background = '';
-    btn.style.color = '';
-    btn.style.borderColor = '';
-    btn.disabled = false;
-  }, 1500);
-}
-
-let st = load();
 
 // ════════════════════════════════════════
 // HELPERS
@@ -599,9 +746,10 @@ function renderWelcome(){
       el.className = 'stat ' + (d.pct>=0?'pos':'neg');
     } else { el.textContent = '尚無持股'; el.className = 'stat'; }
   });
+  renderWelcomePwdStatus();
 }
 
-function enterUser(ui){
+async function enterUser(ui){
   cu = ui;
   const cfg = USERS_CFG[ui];
   document.getElementById('welcomeScreen').style.display = 'none';
@@ -616,17 +764,24 @@ function enterUser(ui){
   document.getElementById('addBtn').className = 'btn btn-primary btn-' + cfg.colorClass;
   document.querySelectorAll('.tab.active').forEach(t=>t.classList.add(cfg.colorClass));
 
-  // Apply saved theme
   if(!st.themes) st.themes = ['',''];
   applyTheme(st.themes[cu] || '');
 
-  // Reset collapse states for new user
   stockOpen = {};
   disposalOpen = {};
 
   showTab(0, document.getElementById('tab0'));
   renderPricePage();
   renderPortfolio();
+
+  // 從雲端載入最新資料（如果有設定 GAS URL）
+  const loaded = await cloudLoad(ui);
+  if(loaded){
+    sortData();
+    renderPortfolio();
+    renderPricePage();
+    applyTheme(st.themes[cu] || '');
+  }
 }
 
 function goBack(){
@@ -1170,11 +1325,11 @@ function renderDisposalTable(){
 // ════════════════════════════════════════
 // PRICE & FX PAGE
 // ════════════════════════════════════════
+
 function renderPricePage(){
-  // Collect all tickers across both users (show current user only)
   const tickers = [...new Set(st.stocks[cu].map(s=>s.ticker))];
   const grid = document.getElementById('priceGrid');
-  if(!tickers.length){ grid.innerHTML='<div style="color:var(--text2);font-size:13px;">尚無持股</div>'; }
+  if(!tickers.length){ grid.innerHTML='<div style="color:var(--text2);font-size:14px;">尚無持股</div>'; }
   else {
     grid.innerHTML = tickers.map(t=>{
       const s = st.stocks[cu].find(s=>s.ticker===t);
@@ -1183,12 +1338,66 @@ function renderPricePage(){
       return `<div class="price-item">
         <span class="ticker-label">${t}<span class="curr-badge curr-${curr}" style="margin-left:4px;">${curr}</span></span>
         <input type="number" step="${dec>0?'0.01':'1'}" value="${st.prices[t]||''}" placeholder="0"
-          oninput="updatePrice('${t}',this.value)" style="max-width:120px;">
+          oninput="updatePrice('${t}',this.value)" style="max-width:130px;">
       </div>`;
     }).join('');
   }
-  // FX
   ['USD','JPY','HKD'].forEach(c=>{ document.getElementById('fx_'+c).value = st.fx[c]||''; });
+}
+
+async function autoFetchPrices(){
+  const gasUrl = getGasUrl();
+  if(!gasUrl){ alert('請先設定 GAS URL'); return; }
+
+  // 收集當前使用者的所有持股（去重）
+  const tickerSet = new Map();
+  st.stocks[cu].forEach(s=>{ if(!tickerSet.has(s.ticker)) tickerSet.set(s.ticker, s.curr); });
+
+  if(tickerSet.size === 0){ alert('目前沒有持股，請先新增股票'); return; }
+
+  // 組成參數：TSM:USD,VTI:USD,2330:TWD
+  const tickerParam = [...tickerSet.entries()].map(([t,c])=>`${t}:${c}`).join(',');
+
+  const btn = document.getElementById('autoFetchBtn');
+  const status = document.getElementById('fetchStatus');
+  btn.disabled = true;
+  btn.textContent = '⏳ 抓取中...';
+  status.style.color = 'var(--text2)';
+  status.textContent = `正在查詢 ${[...tickerSet.keys()].join('、')}，約需 ${tickerSet.size * 2}–${tickerSet.size * 3} 秒...`;
+
+  try {
+    const data = await gasGet({action:'fetchPrices', tickers:tickerParam});
+    if(!data || !data.ok) throw new Error(data?.error || '回傳資料異常');
+
+    let updated = 0;
+    for(const [ticker, info] of Object.entries(data.prices)){
+      if(info.price > 0){ st.prices[ticker] = info.price; updated++; }
+    }
+    for(const [curr, rate] of Object.entries(data.fx)){
+      if(rate > 0) st.fx[curr] = rate;
+    }
+
+    save();
+    renderPricePage();
+
+    const errMsg = data.errors && data.errors.length ? `　⚠️ ${data.errors.join('；')}` : '';
+    const time = new Date(data.timestamp).toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+    status.textContent = `✓ 已更新 ${updated} 支股價 + 匯率（${time}）${errMsg}`;
+    status.style.color = 'var(--pos)';
+
+    btn.textContent = '✓ 更新完成';
+    btn.style.background = 'var(--pos)';
+    btn.style.color = '#fff';
+    btn.style.border = 'none';
+    setTimeout(()=>{ btn.textContent='🌐 自動抓取市價'; btn.style.cssText=''; btn.disabled=false; }, 2000);
+
+  } catch(err) {
+    status.textContent = `❌ 抓取失敗：${err.message}`;
+    status.style.color = 'var(--neg)';
+    btn.textContent = '🌐 自動抓取市價';
+    btn.style.cssText = '';
+    btn.disabled = false;
+  }
 }
 
 function updatePrice(ticker, val){
@@ -1395,20 +1604,40 @@ function importJSON(input){
   const file = input.files[0];
   if(!file) return;
   const reader = new FileReader();
-  reader.onload = e=>{
+  reader.onload = async e=>{
     try{
       const data = JSON.parse(e.target.result);
-      // Basic validation
       if(!data.stocks || !data.names){ alert('JSON 格式不正確，請確認是本系統匯出的檔案'); return; }
       if(!confirm('匯入將覆蓋目前所有資料，確定繼續？')) return;
       st = data;
-      if(!st.themes) st.themes = ['',''];
-      // Sort all data after import
+      if(!st.themes)    st.themes    = ['',''];
+      if(!st.snapshots) st.snapshots = [[],[]];
+      if(!st.passwords) st.passwords = {};
       const prevCu = cu;
       [0,1].forEach(ui=>{ cu=ui; sortData(); }); cu=prevCu;
-      save();
+      saveLocal();
+
+      // 上傳兩個人的資料到雲端
+      setSyncStatus('loading','上傳資料到雲端...');
+      const url = getGasUrl();
+      if(url && !url.includes('YOUR_GAS_URL')){
+        try{
+          const sharedData = { prices:st.prices, fx:st.fx, names:st.names, passwords:st.passwords };
+          await Promise.all([
+            gasGetWithPayload('save', {user:'u0', data:{stocks:st.stocks[0],disposals:st.disposals[0],cash:st.cash[0],themes:st.themes[0],snapshots:st.snapshots[0]}}),
+            gasGetWithPayload('save', {user:'u1', data:{stocks:st.stocks[1],disposals:st.disposals[1],cash:st.cash[1],themes:st.themes[1],snapshots:st.snapshots[1]}}),
+            gasGetWithPayload('saveShared', {data:sharedData}),
+          ]);
+          setSyncStatus('ok','匯入完成，已同步至雲端');
+        } catch(e){
+          setSyncStatus('err','匯入成功，但雲端同步失敗');
+        }
+      } else {
+        setSyncStatus('err','離線模式（GAS URL 未設定）');
+      }
+
       renderWelcome();
-      alert('匯入成功！');
+      alert('匯入成功！資料已同步至雲端。');
     }catch(err){
       alert('解析失敗：' + err.message);
     }
@@ -1498,6 +1727,117 @@ function deleteDisposalRecord(){
 }
 
 // ════════════════════════════════════════
+// PASSWORD
+// ════════════════════════════════════════
+
+// Simple hash (not cryptographic, just obfuscation)
+function hashPwd(pwd){
+  let h = 0;
+  for(let i=0;i<pwd.length;i++){ h = Math.imul(31,h)+pwd.charCodeAt(i)|0; }
+  return h.toString(36);
+}
+
+function getPasswordHash(ui){
+  if(!st.passwords) return null;
+  return st.passwords[USERS_CFG[ui].key] || null;
+}
+
+function hasPassword(ui){ return !!getPasswordHash(ui); }
+
+// Update password lock icon on welcome screen
+function renderWelcomePwdStatus(){
+  [0,1].forEach(ui=>{
+    const el = document.getElementById('pwdStatus'+ui);
+    if(el) el.textContent = hasPassword(ui) ? '🔒 需要密碼' : '';
+  });
+}
+
+// Called when user clicks on a user card
+let pendingUserIndex = -1;
+
+function tryEnterUser(ui){
+  if(hasPassword(ui)){
+    pendingUserIndex = ui;
+    const cfg = USERS_CFG[ui];
+    const av = document.getElementById('pwdModalAvatar');
+    av.textContent = getInitial(ui);
+    av.style.background = cfg.lightColor;
+    av.style.color = cfg.color;
+    av.className = 'avatar av'+(ui+1);
+    document.getElementById('pwdModalName').textContent = getUserName(ui);
+    document.getElementById('pwdInput').value = '';
+    document.getElementById('pwdError').textContent = '';
+    document.getElementById('btnConfirmPwd').className = 'btn btn-primary btn-'+cfg.colorClass;
+    openModal('modalPassword');
+    setTimeout(()=>document.getElementById('pwdInput').focus(), 100);
+  } else {
+    enterUser(ui);
+  }
+}
+
+function confirmPassword(){
+  const pwd = document.getElementById('pwdInput').value;
+  if(!pwd){ document.getElementById('pwdError').textContent = '請輸入密碼'; return; }
+  const hash = hashPwd(pwd);
+  if(hash === getPasswordHash(pendingUserIndex)){
+    closeModal('modalPassword');
+    enterUser(pendingUserIndex);
+  } else {
+    document.getElementById('pwdError').textContent = '密碼錯誤，請再試一次';
+    document.getElementById('pwdInput').value = '';
+    document.getElementById('pwdInput').focus();
+  }
+}
+
+// Open change/set password modal from inside the app
+function openChangePwd(){
+  const hasPwd = hasPassword(cu);
+  document.getElementById('changePwdTitle').textContent = hasPwd ? '修改密碼' : '設定密碼';
+  document.getElementById('oldPwdGroup').style.display = hasPwd ? '' : 'none';
+  document.getElementById('btnRemovePwd').style.display = hasPwd ? '' : 'none';
+  document.getElementById('btnConfirmChangePwd').className = 'btn btn-primary btn-'+USERS_CFG[cu].colorClass;
+  ['inputOldPwd','inputNewPwd','inputNewPwd2'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('changePwdError').textContent = '';
+  openModal('modalChangePwd');
+  setTimeout(()=>document.getElementById(hasPassword(cu)?'inputOldPwd':'inputNewPwd').focus(), 100);
+}
+
+function confirmChangePassword(){
+  const hasPwd = hasPassword(cu);
+  const oldPwd = document.getElementById('inputOldPwd').value;
+  const newPwd = document.getElementById('inputNewPwd').value;
+  const newPwd2 = document.getElementById('inputNewPwd2').value;
+  const errEl = document.getElementById('changePwdError');
+
+  if(hasPwd && hashPwd(oldPwd) !== getPasswordHash(cu)){
+    errEl.textContent = '目前密碼不正確'; return;
+  }
+  if(newPwd.length < 4){
+    errEl.textContent = '新密碼至少需要 4 個字元'; return;
+  }
+  if(newPwd !== newPwd2){
+    errEl.textContent = '兩次密碼不一致'; return;
+  }
+
+  if(!st.passwords) st.passwords = {};
+  st.passwords[USERS_CFG[cu].key] = hashPwd(newPwd);
+  save(); // 同步到雲端
+  closeModal('modalChangePwd');
+  renderWelcomePwdStatus();
+  alert('密碼已' + (hasPwd ? '更新' : '設定') + '，並同步至雲端！');
+}
+
+function removePassword(){
+  if(!confirm('確定移除密碼？移除後任何人都可以直接進入此帳戶。')) return;
+  if(!st.passwords) st.passwords = {};
+  delete st.passwords[USERS_CFG[cu].key];
+  save(); // 同步到雲端
+  closeModal('modalChangePwd');
+  renderWelcomePwdStatus();
+  alert('密碼已移除，並同步至雲端。');
+}
+
+// ════════════════════════════════════════
 // MODAL HELPERS
 // ════════════════════════════════════════
 function openModal(id){ document.getElementById(id).classList.remove('hidden'); }
@@ -1511,9 +1851,10 @@ document.querySelectorAll('.overlay').forEach(el=>{
 // ════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════
-// Sort both users' data on startup
 [0,1].forEach(ui=>{ cu=ui; sortData(); }); cu=0;
 if(!st.snapshots) st.snapshots = [[],[]];
+if(!st.themes) st.themes = ['',''];
+if(!st.passwords) st.passwords = {};
 renderWelcome();
 </script>
 </body>
